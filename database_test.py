@@ -9,7 +9,7 @@ def create():
         cost real,
         qty integer,
         marg integer,
-        price reals
+        price real
         )""")
 
 ##insertion
@@ -36,3 +36,14 @@ def getallitems():
 def updateitem(id,choice,newdata):
     with conn:
         c.execute("UPDATE items SET {} = :newdata WHERE ID = :id".format(choice),{'newdata':newdata,'id':id})
+
+
+#get data by id
+def getitem(id):
+    with conn:
+        c.execute("SELECT * FROM items WHERE ID=?",(id,))
+        raw=c.fetchone()
+        l=[]
+        for elements in raw:
+            l.append(elements)
+    return l

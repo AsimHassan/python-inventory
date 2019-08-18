@@ -11,8 +11,8 @@ def show_menu():
 	print("2:show")
 	print("3:delete")
 	print("4:update")
-	print("option 5")
-	print("option 6")
+	print("5:Sell")
+	print("6:buy")
 	print("")
 	choice = input("enter your choice:  ")
 	return choice
@@ -28,7 +28,8 @@ def insert():
 	qty=input('enter quantity:')
 	marg=input('enter margin:')
 	price=input('enter price:')	
-	item=Item(name,desc,ID,qty,cost,marg,price)
+	l=[ID,name,desc,cost,qty,marg,price]
+	item=Item(l)
 	database_test.insert_newitem(item)
 
 #function to show all items in table
@@ -58,25 +59,55 @@ def	updatebyid():
 	database_test.updateitem(id,head2[choice],newvalue)
 	print("data updated")
 
+
+#function to sell items
+def sellitembyid():
+	id=input("enter id of sold:")
+	units=input("enter unit sold")
+	l=database_test.getitem(id)
+	itemsold=Item(l)
+	itemsold.sell(units)
+
+# function to buy items
+
+def buyitembyid():
+	id=input("enter id of item purchased:")
+	units=input("enter unit purchased:")
+	l=database_test.getitem(id)
+	itembuy=Item(l)
+	itembuy.buy(units)
+
+
+
 #  item class
 class 	Item(	):
 	"""	class to handle items"""
-	def __init__(self,Name,description,ID,quantity,cost,margin,m_Price):
+	def __init__(self,l):
 		super(	Item, self).__init__()
-		self.Name = Name
-		self.desc = description
-		self.ID = int(ID)
-		self.qty = int(quantity)
-		self.cost = int(cost)
-		self.marg = int(margin)
-		self.m_Price = int(m_Price)
+		self.ID = int(l[0])
+		self.Name = l[1]
+		self.desc = l[2]
+		self.cost = int(l[3])
+		self.qty = int(l[4])
+		self.marg =int( l[5])
+		self.m_Price = float(l[6])
 		if(self.m_Price==0):
 			self.price=self.cost+(self.cost*(self.marg/100))	
 		else :
 			self.price=self.m_Price
+		if(self.marg==0):
+			self.marg=(self.price-self.cost)*100/self.cost
+	def sell(self,units):
+		self.qty=self.qty-int(units)
+		database_test.updateitem(self.ID,'qty',self.qty)
+		print("database updated with sale")
 
+	
 
-
+	def buy(self,units):
+		self.qty=self.qty+int(units)
+		database_test.updateitem(self.ID,'qty',self.qty)
+		print("database updated with purchase")
 
 
 			
