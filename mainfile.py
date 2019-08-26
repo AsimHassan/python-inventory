@@ -17,8 +17,10 @@ def switch(choice):
         BLL.sellitembyid()
     elif choice=='6':
         BLL.buyitembyid()
-
-
+    elif choice=='7':
+        BLL.show_sale()
+    elif choice=='8':
+        BLL.show_purchase()
     else:
         print("no choice")
 
@@ -27,6 +29,9 @@ while(True):
     BLL.show_items()
     choice=BLL.show_menu()
     if choice =="exit":
+        clear()
         exit(1)
     switch(choice)
     clear()
+
+
